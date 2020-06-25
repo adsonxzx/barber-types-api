@@ -20,16 +20,12 @@ export default function ensureAuthenticated(
   }
   const [, token] = authorizationHeader.split(' ');
 
-  try {
-    const decoded = jwt.verify(token, authConfig.jwt.secret);
+  const decoded = jwt.verify(token, authConfig.jwt.secret);
 
-    const { sub } = decoded as TokenPayload;
-    request.user = {
-      id: sub,
-    };
+  const { sub } = decoded as TokenPayload;
+  request.user = {
+    id: sub,
+  };
 
-    return next();
-  } catch (error) {
-    throw new Error('Invalid JWT token');
-  }
+  return next();
 }

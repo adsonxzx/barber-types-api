@@ -19,6 +19,9 @@ module.exports = {
     "camelcase": "off",
     "class-methods-use-this": "off",
     "prettier/prettier": "error",
+    "@typescript-eslint/no-unused-vars": ["error", {
+      "argsIgnorePattern": "_"
+    }],
     "import/extensions": [
     "error",
     "ignorePackages",

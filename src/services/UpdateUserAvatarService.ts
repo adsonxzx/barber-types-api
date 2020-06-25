@@ -4,6 +4,7 @@ import fs from 'fs';
 
 import User from '../models/User';
 import upload from '../config/upload';
+import AppError from '../error/AppError';
 
 interface Request {
   user_id: string;
@@ -17,7 +18,7 @@ class UpdateUserAvatarService {
     const user = await userRepository.findOne({ where: { id: user_id } });
 
     if (!user) {
-      throw new Error('User does not exist');
+      throw new AppError('User does not exist');
     }
 
     if (user.avatar) {
