@@ -16,18 +16,27 @@ module.exports = {
     'prettier'
   ],
   rules: {
+    "no-useless-constructor": "off",
     "camelcase": "off",
     "class-methods-use-this": "off",
     "prettier/prettier": "error",
     "@typescript-eslint/no-unused-vars": ["error", {
       "argsIgnorePattern": "_"
     }],
+    "@typescript-eslint/naming-convention": ["error", {
+      "selector": "interface",
+      "format": ["PascalCase"],
+      "custom": {
+        "regex": "^I[A-Z]",
+        "match": true
+      }
+    }],
     "import/extensions": [
     "error",
     "ignorePackages",
     {
       "ts": "never"
-    }
+    },
   ]
   },
   settings: {

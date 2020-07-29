@@ -1,21 +1,25 @@
-import { getRepository } from 'typeorm';
 import path from 'path';
 import fs from 'fs';
 
-import User from '../models/User';
-import upload from '../config/upload';
-import AppError from '../error/AppError';
+import User from '@modules/users/infra/typeorm/entities/User';
+import upload from '@config/upload';
+import AppError from '@shared/error/AppError';
+import IUsersRepository from '../repositories/IUsersRepository';
 
-interface Request {
+interface IRequest {
   user_id: string;
   avatar: string;
 }
 
 class UpdateUserAvatarService {
-  public async execute({ user_id, avatar }: Request): Promise<User> {
-    const userRepository = getRepository(User);
+  private usersRepository: IUsersRepository;
 
-    const user = await userRepository.findOne({ where: { id: user_id } });
+  constructor(usersRepository: IUsersRepository) {
+    this.usersRepository = usersRepository;
+  }
+
+  public async execute({ user_id, avatar }: IRequest): Promise<User> {
+    const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
       throw new AppError('User does not exist');
@@ -35,7 +39,7 @@ class UpdateUserAvatarService {
 
     user.avatar = avatar;
     delete user.password;
-    userRepository.save(user);
+    await this.usersRepository.save(user);
 
     return user;
   }
