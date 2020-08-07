@@ -17,6 +17,7 @@ module.exports = {
     'prettier'
   ],
   rules: {
+    "no-useless-return": "off",
     "no-useless-constructor": "off",
     "camelcase": "off",
     "class-methods-use-this": "off",
