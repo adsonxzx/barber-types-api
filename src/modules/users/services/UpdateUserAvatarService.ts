@@ -1,9 +1,6 @@
-import path from 'path';
-import fs from 'fs';
-
 import User from '@modules/users/infra/typeorm/entities/User';
-import upload from '@config/upload';
 import AppError from '@shared/error/AppError';
+import IStorageUploadProvider from '@shared/container/providers/StorageUploadProvider/models/IStorageUploadProvider';
 import IUsersRepository from '../repositories/IUsersRepository';
 
 interface IRequest {
@@ -14,8 +11,14 @@ interface IRequest {
 class UpdateUserAvatarService {
   private usersRepository: IUsersRepository;
 
-  constructor(usersRepository: IUsersRepository) {
+  private storageProvider: IStorageUploadProvider;
+
+  constructor(
+    usersRepository: IUsersRepository,
+    storageProvider: IStorageUploadProvider,
+  ) {
     this.usersRepository = usersRepository;
+    this.storageProvider = storageProvider;
   }
 
   public async execute({ user_id, avatar }: IRequest): Promise<User> {
@@ -26,18 +29,12 @@ class UpdateUserAvatarService {
     }
 
     if (user.avatar) {
-      const userAvatarFilePath = path.join(
-        upload.folderDestination,
-        user.avatar,
-      );
-      const userAvatarFileExists = await fs.promises.stat(userAvatarFilePath);
-
-      if (userAvatarFileExists) {
-        await fs.promises.unlink(userAvatarFilePath);
-      }
+      await this.storageProvider.deleteFile(user.avatar);
     }
 
-    user.avatar = avatar;
+    const filename = await this.storageProvider.saveFile(avatar);
+
+    user.avatar = filename;
     delete user.password;
     await this.usersRepository.save(user);
 
