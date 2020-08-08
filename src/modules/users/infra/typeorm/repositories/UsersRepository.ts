@@ -1,6 +1,7 @@
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import ICreateUser from '@modules/users/dtos/ICreateUser';
-import { Repository, getRepository } from 'typeorm';
+import { Repository, getRepository, Not } from 'typeorm';
+import IFindAllProviders from '@modules/users/dtos/IFindAllProviders';
 import User from '../entities/User';
 
 export default class UsersRepository implements IUsersRepository {
@@ -20,6 +21,21 @@ export default class UsersRepository implements IUsersRepository {
     await this.ormRepository.save(user);
 
     return user;
+  }
+
+  public async findAllProviders({
+    except_user_id,
+  }: IFindAllProviders): Promise<User[]> {
+    let users = [];
+    if (except_user_id) {
+      users = await this.ormRepository.find({
+        where: { id: Not(except_user_id) },
+        select: ['id', 'name', 'email', 'avatar', 'created_at', 'updated_at'],
+      });
+    } else {
+      users = await this.ormRepository.find();
+    }
+    return users;
   }
 
   public async findById(id: string): Promise<User | undefined> {
