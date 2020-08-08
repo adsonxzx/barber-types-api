@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import authConfig from '@config/auth';
 import AppError from '@shared/error/AppError';
 
-interface TokenPayload {
+interface ITokenPayload {
   sub: string;
   iat: number;
   exp: number;
@@ -23,7 +23,7 @@ export default function ensureAuthenticated(
 
   const decoded = jwt.verify(token, authConfig.jwt.secret);
 
-  const { sub } = decoded as TokenPayload;
+  const { sub } = decoded as ITokenPayload;
   request.user = {
     id: sub,
   };
