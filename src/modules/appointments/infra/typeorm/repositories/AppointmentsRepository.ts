@@ -1,8 +1,11 @@
-import { Repository, getRepository } from 'typeorm';
+import { Repository, getRepository, Raw } from 'typeorm';
 import Appointment from '@modules/appointments/infra/typeorm/entities/Appointment';
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentRepository';
+import IFindAllInMothFromProvider from '@modules/appointments/dtos/IFindAllInMothFromProvider';
+import IFindAllInDayFromProvider from '@modules/appointments/dtos/IFindAllInDayFromProvider';
 
 interface IRequest {
+  user_id: string;
   provider_id: string;
   date: Date;
 }
@@ -22,8 +25,13 @@ class AppointmentsRepository implements IAppointmentsRepository {
     return findAppointment || undefined;
   }
 
-  public async create({ provider_id, date }: IRequest): Promise<Appointment> {
+  public async create({
+    user_id,
+    provider_id,
+    date,
+  }: IRequest): Promise<Appointment> {
     const appointment = this.ormRepository.create({
+      user_id,
       provider_id,
       date,
     });
@@ -34,6 +42,48 @@ class AppointmentsRepository implements IAppointmentsRepository {
 
   public async findAll(): Promise<Array<Appointment> | undefined> {
     const appointments = await this.ormRepository.find();
+
+    return appointments;
+  }
+
+  public async findAllInMothFromProvider({
+    provider_id,
+    month,
+    year,
+  }: IFindAllInMothFromProvider): Promise<Appointment[]> {
+    const parsedMonth = String(month).padStart(2, '0');
+
+    const appointments = await this.ormRepository.find({
+      where: {
+        provider_id,
+        date: Raw(
+          (fieldName) =>
+            `to_char(${fieldName}, 'MM-YYYY') = '${parsedMonth}-${year}'`,
+        ),
+      },
+    });
+
+    return appointments;
+  }
+
+  public async findAllInDayFromProvider({
+    provider_id,
+    day,
+    month,
+    year,
+  }: IFindAllInDayFromProvider): Promise<Appointment[]> {
+    const parsedMonth = String(month).padStart(2, '0');
+    const parsedDay = String(day).padStart(2, '0');
+
+    const appointments = await this.ormRepository.find({
+      where: {
+        provider_id,
+        date: Raw(
+          (fieldName) =>
+            `to_char(${fieldName}, 'DD-MM-YYYY') = '${parsedDay}-${parsedMonth}-${year}'`,
+        ),
+      },
+    });
 
     return appointments;
   }

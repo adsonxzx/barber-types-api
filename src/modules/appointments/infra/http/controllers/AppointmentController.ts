@@ -13,6 +13,7 @@ class AppointmentController {
   }
 
   public async create(request: Request, response: Response) {
+    const { id } = request.user;
     const { provider_id, date } = request.body;
     const appointmentsRepository = new AppointmentsRepository();
 
@@ -23,6 +24,7 @@ class AppointmentController {
     );
 
     const appointment = await createAppointmentService.execute({
+      user_id: id,
       provider_id,
       date: parsedDate,
     });
