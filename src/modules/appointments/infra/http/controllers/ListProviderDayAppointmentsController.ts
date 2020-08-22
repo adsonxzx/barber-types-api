@@ -3,17 +3,15 @@ import AppointmentsRepository from '../../typeorm/repositories/AppointmentsRepos
 
 class ListProviderDayAppointmentsController {
   public async index(request: Request, response: Response): Promise<Response> {
-    const {
- provider_id, day, month, year
-} = request.body;
-
+    const { id } = request.user;
+    const { day, month, year } = request.query;
     const appointmentRepository = new AppointmentsRepository();
 
     const appointments = await appointmentRepository.findAllByDate({
-      provider_id,
-      day,
-      month,
-      year,
+      provider_id: id,
+      day: Number(day),
+      month: Number(month),
+      year: Number(year),
     });
 
     return response.json(appointments);

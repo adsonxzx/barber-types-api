@@ -13,7 +13,7 @@ appointmentsRouter.use(ensureAuthenticated);
 
 appointmentsRouter.get('/', AppointmentController.index);
 
-appointmentsRouter.get('/day', listProviderDayAppointmentsControoler.index);
+appointmentsRouter.get('/me', listProviderDayAppointmentsControoler.index);
 
 appointmentsRouter.post('/', AppointmentController.create);
 
