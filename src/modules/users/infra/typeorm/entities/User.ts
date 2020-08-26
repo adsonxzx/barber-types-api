@@ -23,6 +23,9 @@ class User {
   @Column()
   avatar: string;
 
+  @Column()
+  provider: boolean;
+
   @CreateDateColumn()
   created_at: Date;
 

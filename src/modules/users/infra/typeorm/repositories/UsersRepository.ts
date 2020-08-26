@@ -23,18 +23,12 @@ export default class UsersRepository implements IUsersRepository {
     return user;
   }
 
-  public async findAllProviders({
-    except_user_id,
-  }: IFindAllProviders): Promise<User[]> {
-    let users = [];
-    if (except_user_id) {
-      users = await this.ormRepository.find({
-        where: { id: Not(except_user_id) },
-        select: ['id', 'name', 'email', 'avatar', 'created_at', 'updated_at'],
-      });
-    } else {
-      users = await this.ormRepository.find();
-    }
+  public async findAllProviders(): Promise<User[]> {
+    const users = await this.ormRepository.find({
+      where: { provider: true },
+      select: ['id', 'name', 'email', 'avatar', 'created_at', 'updated_at'],
+    });
+
     return users;
   }
 
