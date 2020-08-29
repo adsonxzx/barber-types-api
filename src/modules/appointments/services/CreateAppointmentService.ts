@@ -18,8 +18,11 @@ class CreateAppointmentService {
   }: ICreateAppointment): Promise<Appointment> {
     const dateFormatted = startOfHour(date);
 
-    const findAppointmentInSameDate = await this.appointmentRepository.findByDate(
-      dateFormatted,
+    const findAppointmentInSameDate = await this.appointmentRepository.findeByDateFromProvider(
+      {
+        date: dateFormatted,
+        provider_id,
+      },
     );
 
     if (findAppointmentInSameDate) {

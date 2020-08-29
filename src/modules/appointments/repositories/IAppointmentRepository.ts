@@ -6,7 +6,9 @@ import IFindaAllByDate from '../dtos/IFindaAllByDate';
 
 export default interface IAppointmentRepository {
   create(data: ICreateAppointment): Promise<Appointment>;
-  findByDate(data: Date): Promise<Appointment | undefined>;
+  findeByDateFromProvider(
+    data: IFindeByDateFromProvider,
+  ): Promise<Appointment | undefined>;
   findAllByDate(data: IFindaAllByDate): Promise<Appointment[]>;
   findAllInMothFromProvider(
     data: IFindAllInMothFromProvider,
@@ -15,4 +17,4 @@ export default interface IAppointmentRepository {
     date: IFindAllInDayFromProvider,
   ): Promise<Appointment[]>;
   findAll(): Promise<Array<Appointment> | undefined>;
-};
+}
