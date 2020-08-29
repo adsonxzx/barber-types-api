@@ -5,7 +5,7 @@ import ListProviderMonthAvailabilityService from '../../../services/ListProvider
 class ProviderMonthAvailabilityController {
   public async index(request: Request, response: Response): Promise<Response> {
     const { provider_id } = request.params;
-    const { month, year } = request.body;
+    const { month, year } = request.query;
 
     const appointmentRepository = new AppointmentsRepository();
     const listProviderMonthAvailability = new ListProviderMonthAvailabilityService(
