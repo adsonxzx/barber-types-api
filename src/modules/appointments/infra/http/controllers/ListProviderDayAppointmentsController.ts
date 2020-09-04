@@ -1,4 +1,6 @@
 import { Request, Response } from 'express';
+import { classToClass } from 'class-transformer';
+
 import AppointmentsRepository from '../../typeorm/repositories/AppointmentsRepository';
 
 class ListProviderDayAppointmentsController {
@@ -14,7 +16,7 @@ class ListProviderDayAppointmentsController {
       year: Number(year),
     });
 
-    return response.json(appointments);
+    return response.json(classToClass(appointments));
   }
 }
 

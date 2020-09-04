@@ -1,4 +1,6 @@
 import { Request, Response } from 'express';
+import { classToClass } from 'class-transformer';
+
 import UpdateUserProfileService from '@modules/users/services/UpdateUserProfileService';
 import HashProvider from '@modules/users/providers/HashProvider/implementations/BCryptHashProvider';
 import UsersRepository from '../../typeorm/repositories/UsersRepository';
@@ -7,7 +9,9 @@ class ProfileController {
   public async update(request: Request, response: Response): Promise<Response> {
     const user_id = request.user.id;
 
-    const { name, email, old_password, password } = request.body;
+    const {
+ name, email, old_password, password
+} = request.body;
 
     const userRepository = new UsersRepository();
     const hashProvider = new HashProvider();
@@ -24,7 +28,7 @@ class ProfileController {
       password,
     });
 
-    return response.json(updatedUser);
+    return response.json(classToClass(updatedUser));
   }
 }
 

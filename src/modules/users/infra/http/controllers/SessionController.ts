@@ -1,4 +1,6 @@
 import { Request, Response } from 'express';
+import { classToClass } from 'class-transformer';
+
 import CreateSessionService from '@modules/users/services/CreateSessionService';
 import HashProvider from '@modules/users/providers/HashProvider/implementations/BCryptHashProvider';
 import UsersRepository from '../../typeorm/repositories/UsersRepository';
@@ -15,9 +17,7 @@ class SessionController {
 
     const { user, token } = await createSession.execute({ email, password });
 
-    delete user.password;
-
-    return response.json({ user, token });
+    return response.json({ user: classToClass(user), token });
   }
 }
 
