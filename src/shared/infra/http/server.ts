@@ -13,7 +13,7 @@ const app = express();
 
 app.use(cors());
 
-app.use('/files', express.static(upload.tempFolder));
+app.use('/files', express.static(upload.uploadsFolder));
 
 app.use(express.json());
 

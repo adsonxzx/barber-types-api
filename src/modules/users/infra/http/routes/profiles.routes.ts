@@ -15,6 +15,7 @@ profilesRouter.put(
       name: Joi.string(),
       email: Joi.string().email(),
       password: Joi.string(),
+      old_password: Joi.string(),
     },
   }),
   profileController.update,
