@@ -1,4 +1,4 @@
-import { getHours, isBefore } from 'date-fns';
+import { getHours, isBefore, isAfter } from 'date-fns';
 import IAppointmentRepository from '../repositories/IAppointmentRepository';
 
 type IResponse = Array<{
@@ -47,12 +47,9 @@ class ListProviderDayAvailabilityService {
         (appointment) => getHours(appointment.date) === hour,
       );
 
-      const currentDate = new Date(Date.now());
-      const compareDate = new Date(year, month - 1, day, hour);
-
       return {
         hour,
-        available: !hasAppointmentInHour && isBefore(compareDate, currentDate),
+        available: !hasAppointmentInHour,
       };
     });
 

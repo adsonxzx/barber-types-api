@@ -1,5 +1,5 @@
 import IAppointmentRepository from '../repositories/IAppointmentRepository';
-import Appointmnet from '../infra/typeorm/entities/Appointment';
+import Appointment from '../infra/typeorm/entities/Appointment';
 
 interface IRequest {
   provider_id: string;
@@ -20,7 +20,7 @@ class ListProviderDayAppointments {
     day,
     month,
     year,
-  }: IRequest): Promise<Appointmnet[]> {
+  }: IRequest): Promise<Appointment[]> {
     const appointments = await this.appointmentRepository.findAllByDate({
       provider_id,
       day,

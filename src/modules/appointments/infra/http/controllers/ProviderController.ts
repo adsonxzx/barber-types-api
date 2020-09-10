@@ -1,4 +1,6 @@
 import { Request, Response } from 'express';
+import { classToClass } from 'class-transformer';
+
 import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepository';
 import ListProvidersService from '@modules/appointments/services/ListProvidersService';
 
@@ -10,7 +12,7 @@ class ProviderController {
 
     const users = await listProviders.execute({ except_user_id: id });
 
-    return response.json(users);
+    return response.json(classToClass(users));
   }
 }
 
