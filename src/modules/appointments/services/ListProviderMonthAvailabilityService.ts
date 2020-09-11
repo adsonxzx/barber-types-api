@@ -1,4 +1,10 @@
-import { getDaysInMonth, getDate, isBefore, isAfter, isWithinInterval } from 'date-fns';
+import {
+  getDaysInMonth,
+  getDate,
+  isBefore,
+  isAfter,
+  isWithinInterval,
+} from 'date-fns';
 import IAppointmentRepository from '../repositories/IAppointmentRepository';
 
 interface IRequest {
@@ -46,22 +52,30 @@ class ListProviderMonthAvailabilityService {
       );
 
       const today = new Date();
-      const currentDate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
-      const appointmentDate = new Date(year, month -1, day, 0, 0, 0);
+      const currentDate = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate(),
+        0,
+        0,
+        0,
+      );
+      const appointmentDate = new Date(year, month - 1, day, 0, 0, 0);
 
       let isFutureDate = false;
 
-      if(month >= today.getMonth()) {
+      if (month >= today.getMonth()) {
         isFutureDate = isWithinInterval(appointmentDate, {
-          start:currentDate,
-          end: new Date(year, month -1, daysOfMonth, 0,0,0)
-        })
+          start: currentDate,
+          end: new Date(year, month - 1, daysOfMonth, 0, 0, 0),
+        });
       }
 
       return {
         day,
-        available: appointmentsInDay.length < 10 && isFutureDate,
-        hasAppointment: appointmentsInDay.length >= 1
+        isPast: !isFutureDate,
+        available: appointmentsInDay.length < 10,
+        hasAppointment: appointmentsInDay.length >= 1,
       };
     });
 
