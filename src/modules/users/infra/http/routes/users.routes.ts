@@ -24,6 +24,17 @@ usersRouter.post(
   UserController.create,
 );
 
+usersRouter.get(
+  '/',
+  ensureAuthenticated,
+  celebrate({
+    [Segments.QUERY]: {
+      email: Joi.string().email().required(),
+    },
+  }),
+  UserController.show,
+);
+
 usersRouter.patch(
   '/avatar',
   ensureAuthenticated,
