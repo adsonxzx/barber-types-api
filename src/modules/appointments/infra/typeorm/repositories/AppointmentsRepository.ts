@@ -3,13 +3,17 @@ import Appointment from '@modules/appointments/infra/typeorm/entities/Appointmen
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentRepository';
 import IFindAllInMothFromProvider from '@modules/appointments/dtos/IFindAllInMothFromProvider';
 import IFindAllInDayFromProvider from '@modules/appointments/dtos/IFindAllInDayFromProvider';
-import { set } from 'date-fns';
+import { parseISO, set, isAfter } from 'date-fns';
 import IFindaAllByDate from '@modules/appointments/dtos/IFindaAllByDate';
 
 interface IRequest {
   user_id: string;
   provider_id: string;
   date: Date;
+}
+
+interface IAppointment {
+  date: string;
 }
 
 class AppointmentsRepository implements IAppointmentsRepository {
@@ -43,7 +47,8 @@ class AppointmentsRepository implements IAppointmentsRepository {
       where: {
         provider_id,
         date: Raw(
-          (fieldName) => `to_char(${fieldName}, 'DD-MM-YYYY') = '${parsedDay}-${parsedMonth}-${year}'`,
+          (fieldName) =>
+            `to_char(${fieldName}, 'DD-MM-YYYY') = '${parsedDay}-${parsedMonth}-${year}'`,
         ),
       },
     });
@@ -83,7 +88,8 @@ class AppointmentsRepository implements IAppointmentsRepository {
       where: {
         provider_id,
         date: Raw(
-          (fieldName) => `to_char(${fieldName}, 'MM-YYYY') = '${parsedMonth}-${year}'`,
+          (fieldName) =>
+            `to_char(${fieldName}, 'MM-YYYY') = '${parsedMonth}-${year}'`,
         ),
       },
     });
@@ -104,12 +110,29 @@ class AppointmentsRepository implements IAppointmentsRepository {
       where: {
         provider_id,
         date: Raw(
-          (fieldName) => `to_char(${fieldName}, 'DD-MM-YYYY') = '${parsedDay}-${parsedMonth}-${year}'`,
+          (fieldName) =>
+            `to_char(${fieldName}, 'DD-MM-YYYY') = '${parsedDay}-${parsedMonth}-${year}'`,
         ),
       },
     });
 
     return appointments;
+  }
+
+  public async findAllNextFromClient(
+    client_id: string,
+  ): Promise<Array<Appointment> | undefined> {
+    const clientAppointments = await this.ormRepository.find({
+      where: {
+        user_id: client_id,
+      },
+    });
+
+    const nextAppointments = clientAppointments.filter(
+      (appointment: IAppointment) => isAfter(appointment.date, new Date()),
+    );
+
+    return nextAppointments || undefined;
   }
 }
 

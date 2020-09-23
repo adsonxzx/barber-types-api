@@ -17,4 +17,7 @@ export default interface IAppointmentRepository {
     date: IFindAllInDayFromProvider,
   ): Promise<Appointment[]>;
   findAll(): Promise<Array<Appointment> | undefined>;
+  findAllNextFromClient(
+    client_id: string,
+  ): Promise<Array<Appointment> | undefined>;
 }
