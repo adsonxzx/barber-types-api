@@ -1,7 +1,5 @@
 import IUserTokenRepository from '@modules/users/repositories/IUserTokenRepository';
 import IUserRepository from '@modules/users/repositories/IUsersRepository';
-import MailProvider from '@shared/container/providers/MailProvider/implementations/MailProvider';
-import UserRepository from '@modules/users/infra/typeorm/repositories/UsersRepository';
 import IMailProvider from '@shared/container/providers/MailProvider/models/IMailProvider';
 
 import AppError from '@shared/error/AppError';
@@ -17,10 +15,14 @@ class SendEmailForgotPasswordService {
 
   private mailCliente: IMailProvider;
 
-  constructor(userTokenRepository: IUserTokenRepository) {
-    this.mailCliente = new MailProvider();
+  constructor(
+    userTokenRepository: IUserTokenRepository,
+    usersRepository: IUserRepository,
+    mailCliente: IMailProvider,
+  ) {
+    this.mailCliente = mailCliente;
     this.usersTokenRepository = userTokenRepository;
-    this.usersRepository = new UserRepository();
+    this.usersRepository = usersRepository;
   }
 
   public async execute({ email }: IRequest): Promise<void> {

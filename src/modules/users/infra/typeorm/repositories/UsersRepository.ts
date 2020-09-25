@@ -1,7 +1,6 @@
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import ICreateUser from '@modules/users/dtos/ICreateUser';
-import { Repository, getRepository, Not } from 'typeorm';
-import IFindAllProviders from '@modules/users/dtos/IFindAllProviders';
+import { Repository, getRepository } from 'typeorm';
 import User from '../entities/User';
 
 export default class UsersRepository implements IUsersRepository {
