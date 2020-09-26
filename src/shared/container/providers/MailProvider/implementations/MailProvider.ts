@@ -6,7 +6,6 @@ class MailProvider implements IMailProvider {
 
   constructor() {
     nodemailer.createTestAccount().then((account) => {
-      console.log('account');
       const transporte = nodemailer.createTransport({
         host: account.smtp.host,
         port: account.smtp.port,
@@ -16,7 +15,6 @@ class MailProvider implements IMailProvider {
           pass: account.pass,
         },
       });
-      console.log('transporte');
       this.cliente = transporte;
     });
   }
@@ -30,8 +28,6 @@ class MailProvider implements IMailProvider {
     };
 
     const info = await this.cliente.sendMail(message);
-    console.log('Message sent: %s', info.messageId);
-    // Preview only available when sending through an Ethereal account
     console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
   }
 }

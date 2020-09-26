@@ -5,12 +5,13 @@ import MailProvider from '@shared/container/providers/MailProvider/implementatio
 import UserTokenRepository from '../../typeorm/repositories/UserTokenRepository';
 import UserRepository from '../../typeorm/repositories/UsersRepository';
 
+const mailProvider = new MailProvider();
+
 class PasswordForgotController {
   public async create(request: Request, response: Response) {
     const { email } = request.body;
     const userTokenRepository = new UserTokenRepository();
     const userRepository = new UserRepository();
-    const mailProvider = new MailProvider();
 
     const sendEmailForgotPasswordService = new SendEmailForgotPasswordService(
       userTokenRepository,
