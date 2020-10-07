@@ -47,9 +47,12 @@ class ListProviderDayAvailabilityService {
         (appointment) => getHours(appointment.date) === hour,
       );
 
+      const currentDate = new Date(Date.now());
+      const compareDate = new Date(year, month - 1, day, hour);
+
       return {
         hour,
-        available: !hasAppointmentInHour,
+        available: !hasAppointmentInHour && isAfter(compareDate, currentDate),
       };
     });
 
