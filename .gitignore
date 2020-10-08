@@ -5,3 +5,4 @@ yarn-error.log
 !/temp/.gitkeep
 /coverage
 dist
+ormconfig.json

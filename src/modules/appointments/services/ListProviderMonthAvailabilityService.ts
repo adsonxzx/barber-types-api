@@ -54,7 +54,7 @@ class ListProviderMonthAvailabilityService {
       const today = new Date();
       const currentDate = new Date(
         today.getFullYear(),
-        today.getMonth(),
+        today.getMonth() + 1,
         today.getDate(),
         0,
         0,
@@ -64,10 +64,10 @@ class ListProviderMonthAvailabilityService {
 
       let isFutureDate = false;
 
-      if (month >= today.getMonth()) {
+      if (month >= today.getMonth() + 1) {
         isFutureDate = isWithinInterval(appointmentDate, {
           start: currentDate,
-          end: new Date(year, month - 1, daysOfMonth, 0, 0, 0),
+          end: new Date(year, month, daysOfMonth, 0, 0, 0),
         });
       }
 
