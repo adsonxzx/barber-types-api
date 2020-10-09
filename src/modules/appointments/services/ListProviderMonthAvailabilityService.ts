@@ -1,10 +1,4 @@
-import {
-  getDaysInMonth,
-  getDate,
-  isBefore,
-  isAfter,
-  isWithinInterval,
-} from 'date-fns';
+import { getDaysInMonth, getDate, isWithinInterval } from 'date-fns';
 import IAppointmentRepository from '../repositories/IAppointmentRepository';
 
 interface IRequest {
@@ -60,7 +54,7 @@ class ListProviderMonthAvailabilityService {
         0,
         0,
       );
-      const appointmentDate = new Date(year, month - 1, day, 0, 0, 0);
+      const appointmentDate = new Date(year, month, day, 0, 0, 0);
 
       let isFutureDate = false;
 
